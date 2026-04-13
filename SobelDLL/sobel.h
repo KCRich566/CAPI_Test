@@ -12,21 +12,21 @@
  *   - The handle is NOT thread-safe; callers must synchronize externally.
  */
 
-/* ------------------------------------------------------------------ */
-/*  Export macro                                                       */
-/* ------------------------------------------------------------------ */
+ /* ------------------------------------------------------------------ */
+ /*  Export macro                                                       */
+ /* ------------------------------------------------------------------ */
 #if defined(_WIN32) || defined(_WIN64)
-  #ifdef SOBELDLL_EXPORTS
-	#define SOBELDLL_API __declspec(dllexport)
-  #else
-	#define SOBELDLL_API __declspec(dllimport)
-  #endif
+#ifdef SOBELDLL_EXPORTS
+#define SOBELDLL_API __declspec(dllexport)
 #else
-  #if defined(__GNUC__) && __GNUC__ >= 4
-	#define SOBELDLL_API __attribute__((visibility("default")))
-  #else
-	#define SOBELDLL_API
-  #endif
+#define SOBELDLL_API __declspec(dllimport)
+#endif
+#else
+#if defined(__GNUC__) && __GNUC__ >= 4
+#define SOBELDLL_API __attribute__((visibility("default")))
+#else
+#define SOBELDLL_API
+#endif
 #endif
 
 /* ------------------------------------------------------------------ */
@@ -34,11 +34,11 @@
 /* ------------------------------------------------------------------ */
 typedef enum SobelErrorCode
 {
-	SOBEL_SUCCESS            =   0,
-	SOBEL_ERROR_INVALID_ARG  =  -1,
-	SOBEL_ERROR_FILE_IO      =  -2,
-	SOBEL_ERROR_NO_IMAGE     =  -3,
-	SOBEL_ERROR_UNKNOWN      = -99
+	SOBEL_SUCCESS = 0,
+	SOBEL_ERROR_INVALID_ARG = -1,
+	SOBEL_ERROR_FILE_IO = -2,
+	SOBEL_ERROR_NO_IMAGE = -3,
+	SOBEL_ERROR_UNKNOWN = -99
 } SobelError;
 
 /* ------------------------------------------------------------------ */
@@ -48,11 +48,10 @@ typedef enum SobelErrorCode
 extern "C" {
 #endif
 
-	/* Forward declaration of the opaque context structure.
-	 * SobelContext 的具體定義隱藏在 sobel.cpp 中，外部只能看到指標。
-	 * 相比 void*，這提供了型別安全：編譯器能區分 SobelContext* 與其他指標類型。 */
-	typedef struct SobelContext SobelContext;
-	typedef SobelContext* SobelHandle;
+	// Forward declaration and pointer typedef for the opaque context structure.
+	   // This single typedef both forward-declares the struct and defines the
+	   // opaque pointer type used by the public API.
+	typedef struct SobelContext* SobelHandle;
 
 	/* Create / destroy ------------------------------------------------ */
 	SOBELDLL_API SobelHandle sobel_create(void);
@@ -68,8 +67,8 @@ extern "C" {
 	SOBELDLL_API SobelError  sobel_save(SobelHandle handle, const char* outputFile);
 
 	/* Query image dimensions (0 if no image loaded) ------------------- */
-	SOBELDLL_API int         sobel_get_width(SobelHandle handle);
-	SOBELDLL_API int         sobel_get_height(SobelHandle handle);
+	SOBELDLL_API int sobel_get_width(SobelHandle handle);
+	SOBELDLL_API int sobel_get_height(SobelHandle handle);
 
 #ifdef __cplusplus
 }

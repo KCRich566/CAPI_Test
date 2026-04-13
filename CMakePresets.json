@@ -102,15 +102,15 @@
       }
     },
     {
-      "name": "wsl-x64-debug",
-      "displayName": "WSL x64 Debug",
+      "name": "wsl-arm64-debug",
+      "displayName": "WSL arm64 Debug",
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/out/build/${presetName}",
       "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" },
       "vendor": {
         "microsoft.com/VisualStudioSettings/CMake/1.0": {
           "hostOS": [ "Linux" ],
-          "intelliSenseMode": "linux-gcc-x64"
+          "intelliSenseMode": "linux-gcc-arm64"
         },
         "microsoft.com/VisualStudioRemoteSettings/CMake/2.0": {
           "sourceDir": "$env{HOME}/.vs/$ms{projectDirName}",
@@ -186,8 +186,8 @@
       "configurePreset": "windows-arm64-release"
     },
     {
-      "name": "wsl-x64-debug",
-      "configurePreset": "wsl-x64-debug"
+      "name": "wsl-arm64-debug",
+      "configurePreset": "wsl-arm64-debug"
     },
     {
       "name": "wsl-x64-release",

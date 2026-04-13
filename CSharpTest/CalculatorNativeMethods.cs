@@ -34,13 +34,11 @@ internal static class CalculatorNativeMethods
     internal static extern IntPtr calculator_get_history_file(IntPtr handle);
 
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-    internal static extern IntPtr calculator_dup_history_file(IntPtr handle);
+    internal static extern IntPtr calculator_dup_history_data_from_file(IntPtr handle);
 
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
     internal static extern void calculator_free(IntPtr ptr);
 }
-
-
 
 public enum CalculatorError : int
 {
@@ -87,7 +85,7 @@ public sealed class Calculator : IDisposable
     {
         get
         {
-            IntPtr p = CalculatorNativeMethods.calculator_dup_history_file(handle);
+            IntPtr p = CalculatorNativeMethods.calculator_dup_history_data_from_file(handle);
             if (p == IntPtr.Zero) return null;
             try
             {

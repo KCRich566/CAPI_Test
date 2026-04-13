@@ -12,6 +12,10 @@
     <Configuration Solution="Release|x64" Project="Release|x64" />
     <Configuration Solution="Debug|ARM64" Project="Debug|ARM64" />
     <Configuration Solution="Release|ARM64" Project="Release|ARM64" />
+    <Platform Solution="Debug|Any CPU" Project="x64" />
+    <Platform Solution="Debug|ARM64" Project="ARM64" />
+    <Platform Solution="Debug|x64" Project="x64" />
+    <Platform Solution="Debug|x86" Project="x86" />
   </Project>
   <Project Path="CalculatorDLL/CalculatorDLL.vcxproj" Id="53fee1ad-1184-48a9-87e4-9d71cf8e4dd8">
     <Configuration Solution="Debug|x86" Project="Debug|Win32" />

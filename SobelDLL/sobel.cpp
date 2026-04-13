@@ -102,7 +102,7 @@ SobelError ImageInternal::load(const char* inputFile)
 	if (!data)
 		return SOBEL_ERROR_FILE_IO;
 
-	width_  = w;
+	width_ = w;
 	height_ = h;
 	gray_.assign(data, data + static_cast<size_t>(w) * h);
 	result_.clear();
@@ -133,7 +133,7 @@ SobelError ImageInternal::apply()
 
 			int gx =
 				-1 * gray_[(y - 1) * width_ + (x - 1)] + 1 * gray_[(y - 1) * width_ + (x + 1)]
-				- 2 * gray_[y       * width_ + (x - 1)] + 2 * gray_[y       * width_ + (x + 1)]
+				- 2 * gray_[y * width_ + (x - 1)] + 2 * gray_[y * width_ + (x + 1)]
 				- 1 * gray_[(y + 1) * width_ + (x - 1)] + 1 * gray_[(y + 1) * width_ + (x + 1)];
 
 			int gy =
@@ -179,65 +179,65 @@ SobelError ImageInternal::save(const char* outputFile) const
 /*  注意：不再需要 static_cast，直接用 handle->impl-> 存取。            */
 /* ================================================================== */
 
-	SOBELDLL_API SobelHandle sobel_create(void)
+SOBELDLL_API SobelHandle sobel_create(void)
+{
+	try
 	{
-		try
-		{
-			SobelContext* ctx = new (std::nothrow) SobelContext;
-			if (!ctx) return nullptr;
+		SobelContext* ctx = new (std::nothrow) SobelContext;
+		if (!ctx) return nullptr;
 
-			ctx->impl = new (std::nothrow) ImageInternal();
-			if (!ctx->impl)
-			{
-				delete ctx;
-				return nullptr;
-			}
-			return ctx;
-		}
-		catch (...)
+		ctx->impl = new (std::nothrow) ImageInternal();
+		if (!ctx->impl)
 		{
+			delete ctx;
 			return nullptr;
 		}
+		return ctx;
 	}
-
-	SOBELDLL_API void sobel_destroy(SobelHandle handle)
+	catch (...)
 	{
-		if (!handle) return;
-		delete handle->impl;
-		delete handle;
+		return nullptr;
 	}
+}
 
-	SOBELDLL_API SobelError sobel_load(SobelHandle handle, const char* inputFile)
-	{
-		if (!handle || !handle->impl || !inputFile) return SOBEL_ERROR_INVALID_ARG;
-		try { return handle->impl->load(inputFile); }
-		catch (...) { return SOBEL_ERROR_UNKNOWN; }
-	}
+SOBELDLL_API void sobel_destroy(SobelHandle handle)
+{
+	if (!handle) return;
+	delete handle->impl;
+	delete handle;
+}
 
-	SOBELDLL_API SobelError sobel_apply(SobelHandle handle)
-	{
-		if (!handle || !handle->impl) return SOBEL_ERROR_INVALID_ARG;
-		try { return handle->impl->apply(); }
-		catch (...) { return SOBEL_ERROR_UNKNOWN; }
-	}
+SOBELDLL_API SobelError sobel_load(SobelHandle handle, const char* inputFile)
+{
+	if (!handle || !handle->impl || !inputFile) return SOBEL_ERROR_INVALID_ARG;
+	try { return handle->impl->load(inputFile); }
+	catch (...) { return SOBEL_ERROR_UNKNOWN; }
+}
 
-	SOBELDLL_API SobelError sobel_save(SobelHandle handle, const char* outputFile)
-	{
-		if (!handle || !handle->impl || !outputFile) return SOBEL_ERROR_INVALID_ARG;
-		try { return handle->impl->save(outputFile); }
-		catch (...) { return SOBEL_ERROR_UNKNOWN; }
-	}
+SOBELDLL_API SobelError sobel_apply(SobelHandle handle)
+{
+	if (!handle || !handle->impl) return SOBEL_ERROR_INVALID_ARG;
+	try { return handle->impl->apply(); }
+	catch (...) { return SOBEL_ERROR_UNKNOWN; }
+}
 
-	SOBELDLL_API int sobel_get_width(SobelHandle handle)
-	{
-		if (!handle || !handle->impl) return 0;
-		try { return handle->impl->get_width(); }
-		catch (...) { return 0; }
-	}
+SOBELDLL_API SobelError sobel_save(SobelHandle handle, const char* outputFile)
+{
+	if (!handle || !handle->impl || !outputFile) return SOBEL_ERROR_INVALID_ARG;
+	try { return handle->impl->save(outputFile); }
+	catch (...) { return SOBEL_ERROR_UNKNOWN; }
+}
 
-	SOBELDLL_API int sobel_get_height(SobelHandle handle)
-	{
-		if (!handle || !handle->impl) return 0;
-		try { return handle->impl->get_height(); }
-		catch (...) { return 0; }
-	}
+SOBELDLL_API int sobel_get_width(SobelHandle handle)
+{
+	if (!handle || !handle->impl) return 0;
+	try { return handle->impl->get_width(); }
+	catch (...) { return 0; }
+}
+
+SOBELDLL_API int sobel_get_height(SobelHandle handle)
+{
+	if (!handle || !handle->impl) return 0;
+	try { return handle->impl->get_height(); }
+	catch (...) { return 0; }
+}

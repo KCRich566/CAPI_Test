@@ -81,13 +81,13 @@ extern "C" {
 	 *	- Returns a library-owned `const char*` pointing to internal storage. Caller MUST NOT free it.
 	 *	- Valid until `calculator_destroy` is called or until the library documents it becomes invalid.
 	*/
-	CALCULATORDLL_API const char* calculator_get_history_file(CalculatorHandle handle);
+	CALCULATORDLL_API const char* calculator_get_history_data_from_file(CalculatorHandle handle);
 	/*
 	 * `calculator_dup_history_file`
 	 *	- Returns a newly allocated `char*` (caller-owned). Caller MUST free it with `calculator_free`.
 	 *	- Use this when you need the string beyond the lifetime of the handle or to modify it.
 	 */
-	CALCULATORDLL_API char* calculator_dup_history_file(CalculatorHandle handle);
+	CALCULATORDLL_API char* calculator_dup_history_data_from_file(CalculatorHandle handle);
 
 	/*
 	 * Freeing caller-owned memory

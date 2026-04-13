@@ -218,18 +218,11 @@ CalculatorError CalculatorContext::save_history()
 /* ================================================================== */
 /*  C API wrappers                                                     */
 /* ================================================================== */
-// extern "C" 已經在header中第一行定義了, 這裡就不需要再定義一次了, 直接實現函數即可. 這樣做可以避免在cpp文件中引入不必要的頭文件（如<fstream>和<filesystem>），從而減少編譯時間和依賴關係。
-// 為什麼不使用new (std::nothrow)來創建CalculatorContext實例呢？使用new (std::nothrow)可以在內存分配失敗時返回nullptr，而不是拋出std::bad_alloc異常。這樣可以讓我們在C API中更簡單地處理內存分配失敗的情況，避免了異常處理的複雜性。然而，在這個實現中，
-// 我們選擇使用普通的new，並通過try-catch塊來捕獲任何可能的異常，這樣做也能夠有效地處理內存分配失敗的情況，並且保持代碼的簡潔性。
 CALCULATORDLL_API CalculatorHandle calculator_create(const char* historyFile)
 {
 	try
 	{
 		std::string hf = historyFile ? historyFile : "";
-		// static_cast: 將CalculatorContext*轉換為CalculatorHandle（即void*）。
-		// 這是一種安全的轉換，因為我們知道CalculatorHandle實際上是用來
-		// 代表CalculatorContext的指針。
-		// 使用static_cast可以讓我們在C API中隱藏具體的實現細節，保持接口的純C風格
 		return static_cast<CalculatorHandle>(new CalculatorContext(hf));
 	}
 	catch (...)
@@ -343,7 +336,7 @@ CALCULATORDLL_API double calculator_get_cur_value(CalculatorHandle handle)
 	}
 }
 
-CALCULATORDLL_API const char* calculator_get_history_file(CalculatorHandle handle)
+CALCULATORDLL_API const char* calculator_get_history_data_from_file(CalculatorHandle handle)
 {
 	if (!handle)
 	{
@@ -359,7 +352,7 @@ CALCULATORDLL_API const char* calculator_get_history_file(CalculatorHandle handl
 	}
 }
 
-CALCULATORDLL_API char* calculator_dup_history_file(CalculatorHandle handle)
+CALCULATORDLL_API char* calculator_dup_history_data_from_file(CalculatorHandle handle)
 {
 	if (!handle)
 	{

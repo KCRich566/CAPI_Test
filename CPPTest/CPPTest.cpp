@@ -82,7 +82,7 @@ int main()
 		if (rc != CALC_SUCCESS) std::cout << "Add failed at " << i << ": " << rc << std::endl;
 	}
 
-	print_history(calculator_get_history_file(calc));
+    print_history(calculator_get_history_data_from_file(calc));
 
 	calculator_destroy(calc);
 

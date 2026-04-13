@@ -85,9 +85,9 @@ dotnet run --project CSharpTest
 
 # 在WSL環境下, 使用CMAKE來Build Code -> so
 ```
- WSL x64 Debug
-wsl cmake --preset wsl-x64-debug
-wsl cmake --build --preset wsl-x64-debug
+ WSL ARM64 Debug
+wsl cmake --preset wsl-arm64-debug
+wsl cmake --build --preset wsl-arm64-debug
 ```
 之後把dll複製到C#專案的資料夾裡面, 這樣就可以在C#專案裡面使用這些dll了。
 同時需要修改csproj檔案的PlatformTarget
