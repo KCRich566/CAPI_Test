@@ -1,0 +1,28 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="ARM64" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="CSharpTest/CSharpTest.csproj" Id="99000749-e863-4ebe-a593-21b75561ae5f">
+    <Configuration Solution="Debug|x86" Project="Debug|x86" />
+    <Configuration Solution="Release|x86" Project="Release|x86" />
+    <Configuration Solution="Debug|x64" Project="Debug|x64" />
+    <Configuration Solution="Release|x64" Project="Release|x64" />
+    <Configuration Solution="Debug|ARM64" Project="Debug|ARM64" />
+    <Configuration Solution="Release|ARM64" Project="Release|ARM64" />
+  </Project>
+  <Project Path="CalculatorDLL/CalculatorDLL.vcxproj" Id="53fee1ad-1184-48a9-87e4-9d71cf8e4dd8">
+    <Configuration Solution="Debug|x86" Project="Debug|Win32" />
+    <Configuration Solution="Release|x86" Project="Release|Win32" />
+  </Project>
+  <Project Path="SobelDLL/SobelDLL.vcxproj" Id="b7a2f5e1-3c4d-4e6f-8a9b-1c2d3e4f5a6b">
+    <Configuration Solution="Debug|x86" Project="Debug|Win32" />
+    <Configuration Solution="Release|x86" Project="Release|Win32" />
+  </Project>
+  <Project Path="CPPTest/CPPTest.vcxproj" Id="ea44312c-0230-4bff-857e-cdc0910d3342">
+    <Configuration Solution="Debug|x86" Project="Debug|Win32" />
+    <Configuration Solution="Release|x86" Project="Release|Win32" />
+  </Project>
+</Solution>
