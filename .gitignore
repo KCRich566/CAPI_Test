@@ -39,3 +39,19 @@
 
 # debug information files
 *.dwo
+/x64
+/CalculatorTest/x64
+/CalculatorTest/*.user
+/CalculatorDLL/x64
+/.vs
+/CalculatorDLL/*.user
+/CalculatorCSharp/bin
+/CalculatorCSharp/obj
+/build_linux
+/build_msvc
+/out
+/ARM64
+/CalculatorTest/ARM64
+/CalculatorDLL/ARM64
+/CSharpTest/obj
+/Win32
