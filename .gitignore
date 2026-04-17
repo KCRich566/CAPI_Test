@@ -65,3 +65,4 @@
 /SobelDLL/ARM64
 /SobelDLL/Win32
 /CPPTest/history.txt
+/SobelDLL/*.user
