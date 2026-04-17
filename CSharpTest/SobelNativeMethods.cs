@@ -26,7 +26,7 @@ internal static class SobelNativeMethods
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
     internal static extern int sobel_get_height(IntPtr handle);
 
-    // --- Version query ---
+    // Version query
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
     internal static extern int sobel_get_version_major();
 
@@ -75,7 +75,6 @@ public sealed class SobelFilter : IDisposable
 
     /// <summary>
     /// Returns the native DLL version string (e.g. "1.0.0").
-    /// 回傳原生 DLL 的版本字串。
     /// </summary>
     public static string? NativeVersion
     {

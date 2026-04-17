@@ -20,17 +20,20 @@ move the build output to the C# execute directory
 ```
 msbuild CAPI_Test.slnx /p:Configuration=Debug /p:Platform=ARM64 /restore
 .\ARM64\Debug\CPPTest.exe
+dotnet run --project CSharpTest -c Debug -p:Platform=ARM64
 ```
 [x64]
 ```
 msbuild CAPI_Test.slnx /p:Configuration=Debug /p:Platform=x64 /restore
 .\x64\Debug\CPPTest.exe
+dotnet run --project CSharpTest -c Debug -p:Platform=x64
 ```
 [x86]
 ```
 msbuild x86（注意：MSBuild 中 x86 的 Platform 名稱是 Win32，不是 x86）
 msbuild CAPI_Test.slnx /p:Configuration=Debug /p:Platform=x86 /restore
 .\Win32\Debug\CPPTest.exe
+dotnet run --project CSharpTest -c Debug -p:Platform=x86
 ```
 之後把dll複製到C#專案的資料夾裡面, 這樣就可以在C#專案裡面使用這些dll了。
 同時需要修改csproj檔案的PlatformTarget
@@ -49,7 +52,8 @@ powershell
 $env:VSCMD_ARG_TGT_ARCH
 cmake --preset windows-x64-debug
 cmake --build --preset windows-x64-debug
-dotnet run --project CSharpTest
+dotnet run --project CSharpTest -c Debug -p:Platform=x64
+
 ```
 之後把dll複製到C#專案的資料夾裡面, 這樣就可以在C#專案裡面使用這些dll了。
 同時需要修改csproj檔案的PlatformTarget
@@ -64,7 +68,7 @@ powershell
 $env:VSCMD_ARG_TGT_ARCH
 cmake --preset windows-x86-debug
 cmake --build --preset windows-x86-debug
-dotnet run --project CSharpTest
+dotnet run --project CSharpTest -c Debug -p:Platform=x86
 ```
 之後把dll複製到C#專案的資料夾裡面, 這樣就可以在C#專案裡面使用這些dll了。
 同時需要修改csproj檔案的PlatformTarget
@@ -79,7 +83,7 @@ powershell
 $env:VSCMD_ARG_TGT_ARCH
 cmake --preset windows-arm64-debug
 cmake --build --preset windows-arm64-debug
-dotnet run --project CSharpTest
+dotnet run --project CSharpTest -c Debug -p:Platform=ARM64
 ```
 之後把dll複製到C#專案的資料夾裡面, 這樣就可以在C#專案裡面使用這些dll了。
 同時需要修改csproj檔案的PlatformTarget
@@ -93,7 +97,7 @@ wsl cmake --build --preset wsl-arm64-debug
 之後把dll複製到C#專案的資料夾裡面, 這樣就可以在C#專案裡面使用這些dll了。
 同時需要修改csproj檔案的PlatformTarget
 ```
-wsl dotnet run --project CSharpTest 
+wsl dotnet run --project CSharpTest -c Debug -p:Platform=ARM64
 
 ```
 

@@ -41,37 +41,30 @@ typedef enum SobelErrorCode
 	SOBEL_ERROR_UNKNOWN = -99
 } SobelError;
 
-/* ------------------------------------------------------------------ */
-/*  Opaque-handle C API                                                */
-/* ------------------------------------------------------------------ */
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-	// Forward declaration and pointer typedef for the opaque context structure.
-	   // This single typedef both forward-declares the struct and defines the
-	   // opaque pointer type used by the public API.
 	typedef struct SobelContext* SobelHandle;
 
-	/* Create / destroy ------------------------------------------------ */
+	// Create / destroy
 	SOBELDLL_API SobelHandle sobel_create(void);
 	SOBELDLL_API void        sobel_destroy(SobelHandle handle);
 
-	/* Load an image (JPEG, PNG, BMP, etc.) as grayscale --------------- */
+	// Load an image (JPEG, PNG, BMP, etc.) as grayscale
 	SOBELDLL_API SobelError  sobel_load(SobelHandle handle, const char* inputFile);
 
-	/* Apply the Sobel edge-detection filter --------------------------- */
+	// Apply the Sobel edge-detection filter 
 	SOBELDLL_API SobelError  sobel_apply(SobelHandle handle);
 
-	/* Save the result (format inferred from extension: .png/.bmp/.jpg) */
+	// Save the result (format inferred from extension: .png/.bmp/.jpg)
 	SOBELDLL_API SobelError  sobel_save(SobelHandle handle, const char* outputFile);
 
-	/* Query image dimensions (0 if no image loaded) ------------------- */
+	// Query image dimensions (0 if no image loaded)
 	SOBELDLL_API int sobel_get_width(SobelHandle handle);
 	SOBELDLL_API int sobel_get_height(SobelHandle handle);
 
-	/* Version query (managed-friendly, no handle needed) -------------- */
-	/* 版本查詢（不需要 handle，方便 P/Invoke 呼叫）                     */
+	// Version query
 	SOBELDLL_API int         sobel_get_version_major(void);
 	SOBELDLL_API int         sobel_get_version_minor(void);
 	SOBELDLL_API int         sobel_get_version_patch(void);

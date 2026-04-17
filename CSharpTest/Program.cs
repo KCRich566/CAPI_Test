@@ -57,6 +57,8 @@ class Program
             {
                 Console.Error.WriteLine($"Failed to load image.jpg: {sr}");
                 Console.Error.WriteLine("Make sure image.jpg is in the working directory.");
+                Console.WriteLine("Press Enter to exit.");
+                Console.Read();
                 return -1;
             }
             Console.WriteLine($"Image loaded: {sobel.Width} x {sobel.Height}");
@@ -65,6 +67,8 @@ class Program
             if (sr != SobelError.SOBEL_SUCCESS)
             {
                 Console.Error.WriteLine($"Sobel apply failed: {sr}");
+                Console.WriteLine("Press Enter to exit.");
+                Console.Read();
                 return -1;
             }
             Console.WriteLine("Sobel filter applied.");
@@ -74,12 +78,15 @@ class Program
                 Console.Error.WriteLine($"Failed to save result: {sr}");
             else
                 Console.WriteLine("Result saved to sobel_output.png");
-
+            Console.WriteLine("Press Enter to exit.");
+            Console.Read();
             return 0;
         }
         catch (Exception ex)
         {
             Console.Error.WriteLine(ex);
+            Console.WriteLine("Press Enter to exit.");
+            Console.Read();
             return -1;
         }
     }

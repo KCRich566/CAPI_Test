@@ -5,6 +5,10 @@
  *
  * Pure-C public header for the Calculator DLL.
  * Provides export macro, error codes, and the opaque-handle C API.
+ * Ownership / Lifetime:
+ *  - `calculator_create` returns a new CalculatorHandle. Caller owns the handle and must call
+ *    `calculator_destroy` to release library-owned resources associated with the handle.
+ *
  */
 
  /* ------------------------------------------------------------------ */
@@ -25,7 +29,8 @@
 #endif
 
 // define error codes intead of using exceptions, to maintain a pure C API. 
-// This allows the API to be used in C and other languages that can interface with C, without needing to worry about exception handling. 
+// This allows the API to be used in C and other languages that can interface with C, 
+// without needing to worry about exception handling. 
 // Each function will return a CalculatorError code to indicate success or the type of error that occurred, 
 // allowing the caller to handle errors appropriately.
 typedef enum CalculatorErrorCode
@@ -42,14 +47,13 @@ typedef enum CalculatorErrorCode
 extern "C" {
 #endif
 	// Forward declaration of the internal context structure
-	// typedef struct: This is a forward declaration of a struct or class named CalculatorContext. 
-	// It tells the compiler that there is a type called CalculatorContext, 
-	// but it does not provide any details about its structure or implementation. 
+	// it does not provide any details about its structure or implementation. 
 	// This allows us to use pointers to CalculatorContext in our API without exposing the internal details of the context, 
 	// which are defined in the implementation file (calculator.cpp).
-
-	// opaque pointer: this use the handling type of void* to hide the internal structure of the context, which is defined in the implementation file.
-	// This allows us to maintain a pure C API while still providing the necessary functionality.
+	// but we use the void*, it will impact the debug experience, 
+	// as the debugger will not be able to show the internal structure of the context.
+	// so maybe using the typedef CalculatorContext* is better, 
+	// it will allow the debugger to show the internal structure of the context, 
 	typedef void* CalculatorHandle;
 
 	/*
@@ -99,7 +103,6 @@ extern "C" {
 
 	/* ------------------------------------------------------------------ */
 	/*  Version query (managed-friendly, no handle needed)                 */
-	/*  ???????? handle??? P/Invoke ???                      */
 	/* ------------------------------------------------------------------ */
 	CALCULATORDLL_API int         calculator_get_version_major(void);
 	CALCULATORDLL_API int         calculator_get_version_minor(void);
