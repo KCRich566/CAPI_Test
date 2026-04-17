@@ -39,8 +39,11 @@ void print_history(const char* file)
 }
 int main()
 {
-	std::cout << "=== CAPI_Test version " << calculator_get_version_string()
+    std::cout << "=== CAPI_Test version " << calculator_get_version_string()
 			  << " (native C++) ===" << std::endl;
+    // Display versions of the underlying DLLs
+	std::cout << "Calculator DLL version: " << calculator_get_version_string() << std::endl;
+	std::cout << "Sobel DLL version: " << sobel_get_version_string() << std::endl;
 	std::cout << std::endl;
 
 	CalculatorHandle calc = calculator_create("history.txt");
@@ -87,7 +90,19 @@ int main()
 		if (rc != CALC_SUCCESS) std::cout << "Add failed at " << i << ": " << rc << std::endl;
 	}
 
-    print_history(calculator_get_history_data_from_file(calc));
+	print_history(calculator_get_history_data_from_file(calc));
+
+	// Test calculator_dup_history_data_from_file (caller must free with calculator_free)
+	char* dupPath = calculator_dup_history_data_from_file(calc);
+	if (dupPath)
+	{
+		std::cout << "Duplicated history file path: " << dupPath << std::endl;
+		calculator_free(dupPath);
+	}
+	else
+	{
+		std::cout << "calculator_dup_history_data_from_file returned nullptr" << std::endl;
+	}
 
 	calculator_destroy(calc);
 
@@ -136,6 +151,9 @@ int main()
 	}
 
 	sobel_destroy(sobel);
+
+	std::cout << "Press Enter to exit...";
+	std::cin.get();
 
 	return 0;
 }

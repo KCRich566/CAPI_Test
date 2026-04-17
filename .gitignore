@@ -56,3 +56,12 @@
 /CSharpTest/obj
 /Win32
 /generated
+/CPPTest/x64
+/CPPTest/ARM64
+/CPPTest/Win32
+/CSharpTest/bin
+/CalculatorDLL/Win32
+/SobelDLL/x64
+/SobelDLL/ARM64
+/SobelDLL/Win32
+/CPPTest/history.txt
