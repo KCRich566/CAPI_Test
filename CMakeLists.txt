@@ -1,11 +1,17 @@
 # cmake_minimum_required: Specifies the minimum version of CMake required to build the project.
 cmake_minimum_required(VERSION 3.16)
 
+# --- Read shared version from version.txt (single source of truth) ---
+# 從 version.txt 讀取版本號（唯一版本來源，C# 的 Directory.Build.props 也讀同一個檔案）
+file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/version.txt" _VERSION_LINE LIMIT_COUNT 1)
+string(STRIP "${_VERSION_LINE}" _VERSION_LINE)
+
 # project: Defines the name of the project and the programming languages used.
 # CAPI_Calculator: is the name of the project. You can choose any name you like, 
 # but it should be descriptive of what the project does.
 # CXX: indicates that the project uses C++ as the programming language.
-project(CAPI_Test LANGUAGES CXX)
+project(CAPI_Test VERSION ${_VERSION_LINE} LANGUAGES CXX)
+message(STATUS "Project version: ${PROJECT_VERSION}")
 
 # set: Configures various settings for the project.
 # CMAKE_CXX_STANDARD: Specifies the C++ standard to use when compiling the project.
@@ -24,6 +30,36 @@ set(CMAKE_VISIBILITY_INLINES_HIDDEN ON)
 # --- stb (single-header image libraries, used by SobelDLL) ---
 # Headers live in thirdparty/stb (committed to repo, platform-independent).
 set(STB_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/stb)
+
+# --- Version: generate version.h (shared by all native DLLs) ---
+# 從 cmake/version.h.in 產生 version.h，放在 source tree 中供所有建置方式 include
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/cmake/version.h.in
+    ${CMAKE_CURRENT_SOURCE_DIR}/generated/version.h
+    @ONLY
+)
+
+# --- Version: generate Windows .rc files per DLL ---
+# 為每個 DLL 產生 Windows 版本資源檔（嵌入檔案屬性中的版本資訊）
+if(WIN32)
+    set(RC_FILE_DESCRIPTION "Calculator C API DLL")
+    set(RC_INTERNAL_NAME "CalculatorDLL")
+    set(RC_ORIGINAL_FILENAME "CalculatorDLL.dll")
+    configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/cmake/version.rc.in
+        ${CMAKE_CURRENT_BINARY_DIR}/generated/CalculatorDLL_version.rc
+        @ONLY
+    )
+
+    set(RC_FILE_DESCRIPTION "Sobel Edge Detection DLL")
+    set(RC_INTERNAL_NAME "SobelDLL")
+    set(RC_ORIGINAL_FILENAME "SobelDLL.dll")
+    configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/cmake/version.rc.in
+        ${CMAKE_CURRENT_BINARY_DIR}/generated/SobelDLL_version.rc
+        @ONLY
+    )
+endif()
 
 # --- Shared library (.dll on Windows, .so on Linux) ---
 # LIB_SOURCES: A variable that holds the list of source files for the shared library target.
@@ -59,6 +95,9 @@ add_library(CalculatorDLL SHARED ${LIB_SOURCES})
 # ${CMAKE_CURRENT_SOURCE_DIR}/CalculatorDLL: is the path to the directory containing the header files for the CalculatorDLL library.
 # 所以這是將header files所在的目錄添加到CalculatorDLL target的include path中，這樣在編譯CalculatorDLL和使用它的其他target（如CPPTest）時都能找到這些header files。
 target_include_directories(CalculatorDLL PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/CalculatorDLL)
+# Generated headers (version.h) — so #include "version.h" works in both DLLs
+# 產生的標頭（version.h）路徑（放在 source tree，不受 preset 影響）
+target_include_directories(CalculatorDLL PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/generated)
 
 # target_compile_definitions: Defines preprocessor definitions for the CalculatorDLL target.
 # Define CALCULATORDLL_EXPORTS so __attribute__((visibility("default"))) is used
@@ -93,11 +132,18 @@ target_link_libraries(CPPTest PRIVATE SobelDLL)
 # LIBRARY_OUTPUT_DIRECTORY: Specifies the directory where the shared library (.so on Linux) will be placed after building.
 # RUNTIME_OUTPUT_DIRECTORY: Specifies the directory where the executable (.exe on Windows) will be placed after building.
 # ARCHIVE_OUTPUT_DIRECTORY: Specifies the directory where the static library (.lib on Windows) will be placed after building.
+# VERSION / SOVERSION: Linux 上會建立帶 SONAME 的 .so（如 libCalculatorDLL.so.1）
+# On Windows, VERSION/SOVERSION are informational but version.rc embeds file version.
 set_target_properties(CalculatorDLL PROPERTIES
+    VERSION              ${PROJECT_VERSION}
+    SOVERSION            ${PROJECT_VERSION_MAJOR}
     LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib      # Linux .so
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin      # Windows .dll → same dir as .exe
     ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib      # Windows .lib
 )
+if(WIN32)
+    target_sources(CalculatorDLL PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/generated/CalculatorDLL_version.rc)
+endif()
 
 # --- Sobel DLL (image loading + Sobel edge detection) ---
 set(SOBEL_SOURCES
@@ -106,12 +152,19 @@ set(SOBEL_SOURCES
 add_library(SobelDLL SHARED ${SOBEL_SOURCES})
 target_include_directories(SobelDLL PUBLIC  ${CMAKE_CURRENT_SOURCE_DIR}/SobelDLL)
 target_include_directories(SobelDLL PRIVATE ${STB_INCLUDE_DIR})
+# Generated headers (version.h)
+target_include_directories(SobelDLL PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/generated)
 target_compile_definitions(SobelDLL PRIVATE SOBELDLL_EXPORTS)
 set_target_properties(SobelDLL PROPERTIES
+    VERSION              ${PROJECT_VERSION}
+    SOVERSION            ${PROJECT_VERSION_MAJOR}
     LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
     ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
 )
+if(WIN32)
+    target_sources(SobelDLL PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/generated/SobelDLL_version.rc)
+endif()
 # set_target_properties: Configures properties for the CPPTest target.
 # CPPTest: is the name of the executable target for which we are setting properties.
 # ${CMAKE_BINIARY_DIR}: is a CMake variable that expands to the directory where the build files are generated (often called the build directory).

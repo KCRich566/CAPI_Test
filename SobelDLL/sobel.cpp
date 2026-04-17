@@ -1,4 +1,5 @@
 #include "sobel.h"
+#include "version.h"
 #include <string>
 #include <vector>
 #include <cmath>
@@ -240,4 +241,27 @@ SOBELDLL_API int sobel_get_height(SobelHandle handle)
 	if (!handle || !handle->impl) return 0;
 	try { return handle->impl->get_height(); }
 	catch (...) { return 0; }
+}
+
+/* ================================================================== */
+/*  Version query                                                      */
+/* ================================================================== */
+SOBELDLL_API int sobel_get_version_major(void)
+{
+	return CAPI_VERSION_MAJOR;
+}
+
+SOBELDLL_API int sobel_get_version_minor(void)
+{
+	return CAPI_VERSION_MINOR;
+}
+
+SOBELDLL_API int sobel_get_version_patch(void)
+{
+	return CAPI_VERSION_PATCH;
+}
+
+SOBELDLL_API const char* sobel_get_version_string(void)
+{
+	return CAPI_VERSION_STRING;
 }

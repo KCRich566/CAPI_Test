@@ -97,6 +97,15 @@ extern "C" {
 	 */
 	CALCULATORDLL_API void calculator_free(void* ptr);
 
+	/* ------------------------------------------------------------------ */
+	/*  Version query (managed-friendly, no handle needed)                 */
+	/*  ???????? handle??? P/Invoke ???                      */
+	/* ------------------------------------------------------------------ */
+	CALCULATORDLL_API int         calculator_get_version_major(void);
+	CALCULATORDLL_API int         calculator_get_version_minor(void);
+	CALCULATORDLL_API int         calculator_get_version_patch(void);
+	CALCULATORDLL_API const char* calculator_get_version_string(void);
+
 #ifdef __cplusplus
 
 }

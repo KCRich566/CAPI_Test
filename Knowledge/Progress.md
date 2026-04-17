@@ -8,6 +8,7 @@ Cross-build x86 in WSL requires proper toolchain and path adjustments.
 
 
 # 使用MSBiuld來Build Code(IDE)
+
 使用IDE Build個別的專案, 之後把dll複製到C#專案的資料夾裡面, 這樣就可以在C#專案裡面使用這些dll了。
 同時需要修改csproj檔案的PlatformTarget
 
@@ -17,18 +18,18 @@ modified ```<PlatformTarget>x86</PlatformTarget>``` the CSharpTest.csproj file t
 move the build output to the C# execute directory
 [ARM64]
 ```
-msbuild CAPI_Calculator.slnx /p:Configuration=Debug /p:Platform=ARM64 /restore
+msbuild CAPI_Test.slnx /p:Configuration=Debug /p:Platform=ARM64 /restore
 .\ARM64\Debug\CPPTest.exe
 ```
 [x64]
 ```
-msbuild CAPI_Calculator.slnx /p:Configuration=Debug /p:Platform=x64 /restore
+msbuild CAPI_Test.slnx /p:Configuration=Debug /p:Platform=x64 /restore
 .\x64\Debug\CPPTest.exe
 ```
 [x86]
 ```
 msbuild x86（注意：MSBuild 中 x86 的 Platform 名稱是 Win32，不是 x86）
-msbuild CAPI_Calculator.slnx /p:Configuration=Debug /p:Platform=x86 /restore
+msbuild CAPI_Test.slnx /p:Configuration=Debug /p:Platform=x86 /restore
 .\Win32\Debug\CPPTest.exe
 ```
 之後把dll複製到C#專案的資料夾裡面, 這樣就可以在C#專案裡面使用這些dll了。
@@ -85,7 +86,7 @@ dotnet run --project CSharpTest
 
 # 在WSL環境下, 使用CMAKE來Build Code -> so
 ```
- WSL ARM64 Debug
+WSL ARM64 Debug
 wsl cmake --preset wsl-arm64-debug
 wsl cmake --build --preset wsl-arm64-debug
 ```

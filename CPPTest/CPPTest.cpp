@@ -3,6 +3,7 @@
 
 #include "calculator.h"
 #include "sobel.h"
+#include "version.h"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -38,6 +39,10 @@ void print_history(const char* file)
 }
 int main()
 {
+	std::cout << "=== CAPI_Test version " << calculator_get_version_string()
+			  << " (native C++) ===" << std::endl;
+	std::cout << std::endl;
+
 	CalculatorHandle calc = calculator_create("history.txt");
 	if (!calc)
 	{

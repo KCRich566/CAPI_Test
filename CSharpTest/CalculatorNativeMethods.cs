@@ -38,6 +38,19 @@ internal static class CalculatorNativeMethods
 
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
     internal static extern void calculator_free(IntPtr ptr);
+
+    // --- Version query ---
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    internal static extern int calculator_get_version_major();
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    internal static extern int calculator_get_version_minor();
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    internal static extern int calculator_get_version_patch();
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    internal static extern IntPtr calculator_get_version_string();
 }
 
 public enum CalculatorError : int
@@ -97,6 +110,23 @@ public sealed class Calculator : IDisposable
             }
         }
     }
+
+    /// <summary>
+    /// Returns the native DLL version string (e.g. "1.0.0").
+    /// 回傳原生 DLL 的版本字串。
+    /// </summary>
+    public static string? NativeVersion
+    {
+        get
+        {
+            IntPtr p = CalculatorNativeMethods.calculator_get_version_string();
+            return p == IntPtr.Zero ? null : Marshal.PtrToStringAnsi(p);
+        }
+    }
+
+    public static int NativeVersionMajor => CalculatorNativeMethods.calculator_get_version_major();
+    public static int NativeVersionMinor => CalculatorNativeMethods.calculator_get_version_minor();
+    public static int NativeVersionPatch => CalculatorNativeMethods.calculator_get_version_patch();
 
     public void Dispose()
     {

@@ -1,0 +1,49 @@
+<!--
+  Directory.Build.targets
+  Auto-imported AFTER all project content by MSBuild for every project type.
+  - C++ vcxproj: generates version.h from version.txt and adds generated/ to include paths.
+  - C# csproj:   no additional action (versioning is handled by Directory.Build.props).
+-->
+<Project>
+  <PropertyGroup>
+    <_RepoRoot>$(MSBuildThisFileDirectory)</_RepoRoot>
+    <_GeneratedDir>$(_RepoRoot)generated</_GeneratedDir>
+    <_VersionTxtPath>$(_RepoRoot)version.txt</_VersionTxtPath>
+  </PropertyGroup>
+
+  <!-- ===== C++ projects only (detected by .vcxproj extension) ===== -->
+
+  <!-- Add generated/ to include path for all configurations -->
+  <ItemDefinitionGroup Condition="'$(MSBuildProjectExtension)' == '.vcxproj'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(_GeneratedDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+
+  <!-- Regenerate version.h when version.txt changes (incremental build) -->
+  <Target Name="GenerateVersionHeader"
+          BeforeTargets="ClCompile"
+          Condition="'$(MSBuildProjectExtension)' == '.vcxproj'"
+          Inputs="$(_VersionTxtPath)"
+          Outputs="$(_GeneratedDir)\version.h">
+    <Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(_RepoRoot)cmake\generate_version_h.ps1&quot; -VersionFile &quot;$(_VersionTxtPath)&quot; -OutputFile &quot;$(_GeneratedDir)\version.h&quot;" />
+  </Target>
+
+  <!-- Regenerate version.rc from template and include as ResourceCompile so native DLLs have VERSIONINFO -->
+  <ItemGroup Condition="'$(MSBuildProjectExtension)' == '.vcxproj'">
+    <ResourceCompile Include="$(_GeneratedDir)\version.rc" />
+  </ItemGroup>
+
+  <Target Name="GenerateVersionRc"
+          BeforeTargets="ResourceCompile"
+          Condition="'$(MSBuildProjectExtension)' == '.vcxproj'"
+          Inputs="$(_VersionTxtPath);$(_RepoRoot)cmake\version.rc.in"
+          Outputs="$(_GeneratedDir)\version.rc">
+    <Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(_RepoRoot)cmake\generate_version_rc.ps1&quot; -VersionFile &quot;$(_VersionTxtPath)&quot; -TemplateFile &quot;$(_RepoRoot)cmake\version.rc.in&quot; -OutputFile &quot;$(_GeneratedDir)\version.rc&quot; -InternalName &quot;$(MSBuildProjectName)&quot; -OriginalFilename &quot;$(MSBuildProjectName).dll&quot; -FileDescription &quot;$(MSBuildProjectName) native DLL&quot;" />
+  </Target>
+
+  <!-- For C# projects: force InformationalVersion to exactly $(Version) (prevents SDK appending +commit metadata) -->
+  <PropertyGroup Condition="'$(MSBuildProjectExtension)' == '.csproj'">
+    <InformationalVersion>$(Version)</InformationalVersion>
+  </PropertyGroup>
+</Project>

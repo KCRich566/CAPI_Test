@@ -1,0 +1,15 @@
+<!--
+  Directory.Build.props
+  Automatically imported by all .csproj files in this directory tree.
+  Reads the project-wide version from version.txt so that C# assemblies
+  share the same version as the native C++ DLLs.
+-->
+<Project>
+  <PropertyGroup>
+    <_VersionFromFile>$([System.IO.File]::ReadAllText('$(MSBuildThisFileDirectory)version.txt').Trim())</_VersionFromFile>
+    <Version>$(_VersionFromFile)</Version>
+    <AssemblyVersion>$(_VersionFromFile).0</AssemblyVersion>
+    <FileVersion>$(_VersionFromFile).0</FileVersion>
+    <InformationalVersion>$(_VersionFromFile)</InformationalVersion>
+  </PropertyGroup>
+</Project>

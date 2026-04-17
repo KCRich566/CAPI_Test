@@ -25,6 +25,19 @@ internal static class SobelNativeMethods
 
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
     internal static extern int sobel_get_height(IntPtr handle);
+
+    // --- Version query ---
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    internal static extern int sobel_get_version_major();
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    internal static extern int sobel_get_version_minor();
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    internal static extern int sobel_get_version_patch();
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    internal static extern IntPtr sobel_get_version_string();
 }
 
 public enum SobelError : int
@@ -59,6 +72,23 @@ public sealed class SobelFilter : IDisposable
 
     public int Width  => SobelNativeMethods.sobel_get_width(handle);
     public int Height => SobelNativeMethods.sobel_get_height(handle);
+
+    /// <summary>
+    /// Returns the native DLL version string (e.g. "1.0.0").
+    /// 回傳原生 DLL 的版本字串。
+    /// </summary>
+    public static string? NativeVersion
+    {
+        get
+        {
+            IntPtr p = SobelNativeMethods.sobel_get_version_string();
+            return p == IntPtr.Zero ? null : Marshal.PtrToStringAnsi(p);
+        }
+    }
+
+    public static int NativeVersionMajor => SobelNativeMethods.sobel_get_version_major();
+    public static int NativeVersionMinor => SobelNativeMethods.sobel_get_version_minor();
+    public static int NativeVersionPatch => SobelNativeMethods.sobel_get_version_patch();
 
     public void Dispose()
     {

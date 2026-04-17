@@ -79,6 +79,11 @@ Write-Host "[Runtime Artifacts]" -ForegroundColor Magenta
 Remove-Path "$root\history.txt"      "history.txt"
 Remove-Path "$root\sobel_output.png" "sobel_output.png"
 
+# --- Remove generated folder
+Write-Host "[Runtime Artifacts]" -ForegroundColor Magenta
+Remove-Path "$root\generated"      "generated\"
+
+
 Write-Host ""
 if ($DryRun) {
     Write-Host "=== DryRun complete, nothing was deleted ===" -ForegroundColor Yellow

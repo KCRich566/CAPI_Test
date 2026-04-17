@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 
 class Program
 {
@@ -6,6 +7,16 @@ class Program
     {
         try
         {
+            // --- Version info ---
+            var asm = typeof(Program).Assembly;
+            var asmVer = asm.GetName().Version;
+            var infoVer = asm.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+            Console.WriteLine($"C# Assembly version : {asmVer}");
+            Console.WriteLine($"C# Informational ver: {infoVer}");
+            Console.WriteLine($"CalculatorDLL native : {Calculator.NativeVersion}");
+            Console.WriteLine($"SobelDLL native      : {SobelFilter.NativeVersion}");
+            Console.WriteLine();
+
             using var calc = new Calculator("history.txt");
 
             var rc = calc.Reset(out double r1);

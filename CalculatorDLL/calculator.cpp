@@ -1,4 +1,5 @@
 #include "calculator.h"
+#include "version.h"
 #include <stddef.h>
 #include <cstdlib>
 #include <cstring>
@@ -381,5 +382,28 @@ CALCULATORDLL_API void calculator_free(void* ptr)
 		return;
 	}
 	std::free(ptr);
+}
+
+/* ================================================================== */
+/*  Version query                                                      */
+/* ================================================================== */
+CALCULATORDLL_API int calculator_get_version_major(void)
+{
+	return CAPI_VERSION_MAJOR;
+}
+
+CALCULATORDLL_API int calculator_get_version_minor(void)
+{
+	return CAPI_VERSION_MINOR;
+}
+
+CALCULATORDLL_API int calculator_get_version_patch(void)
+{
+	return CAPI_VERSION_PATCH;
+}
+
+CALCULATORDLL_API const char* calculator_get_version_string(void)
+{
+	return CAPI_VERSION_STRING;
 }
 

@@ -70,6 +70,13 @@ extern "C" {
 	SOBELDLL_API int sobel_get_width(SobelHandle handle);
 	SOBELDLL_API int sobel_get_height(SobelHandle handle);
 
+	/* Version query (managed-friendly, no handle needed) -------------- */
+	/* 版本查詢（不需要 handle，方便 P/Invoke 呼叫）                     */
+	SOBELDLL_API int         sobel_get_version_major(void);
+	SOBELDLL_API int         sobel_get_version_minor(void);
+	SOBELDLL_API int         sobel_get_version_patch(void);
+	SOBELDLL_API const char* sobel_get_version_string(void);
+
 #ifdef __cplusplus
 }
 #endif
