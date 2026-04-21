@@ -1,29 +1,22 @@
 # C++ Class
 
 C++ class is a blueprint for objects, supporting encapsulation, inheritance, and polymorphism.  
-C++ 的 class 是物件的藍圖，支援封裝、繼承與多型。
 
-Constructor initializes objects; destructor cleans up resources.  
-建構子（Constructor）用來初始化物件；解構子（Destructor）負責清理資源。
+Constructor initializes objects; destructor cleans up resources.
 
-Encapsulation: use private to protect data and public getters/setters to access it.  
-封裝（Encapsulation）：使用 private 保護資料，透過 public getter/setter 存取。
+Encapsulation: use private to protect data and public getters/setters to access it.
 
-Inheritance lets derived classes extend base classes; polymorphism uses virtual functions.  
-繼承（Inheritance）讓衍生類別擴展基底類別；多型（Polymorphism）使用虛擬函式。
+Inheritance lets derived classes extend base classes; polymorphism uses virtual functions.
 
-Separate header (.h) and source (.cpp) to reduce compile-time coupling and hide implementation.  
-將標頭（.h）與原始碼（.cpp）分離，以降低編譯耦合並隱藏實作。
+Separate header (.h) and source (.cpp) to reduce compile-time coupling and hide implementation.
 
-Use RAII, smart pointers, and PIMPL for robust resource management and stable ABI.  
-使用 RAII、智慧指標與 PIMPL 以達到穩健的資源管理與穩定的 ABI。
+Use RAII, smart pointers, and PIMPL for robust resource management and stable ABI.
 
 ---
 
 ## Class Header Example (.h)
 
-Header files declare the interface of a class without implementation details.  
-標頭檔（.h）宣告類別的介面，而不包含實作細節。
+Header files declare the interface of a class without implementation details.
 
 ```cpp
 // Person.h
@@ -51,7 +44,6 @@ private:
 Class Implementation Example (.cpp)
 
 Source files define the actual implementation of the class functions.
-原始碼檔（.cpp）定義類別函式的實際實作。
 
 ```cpp
 // Person.cpp
@@ -73,22 +65,16 @@ void Person::setName(const std::string& name) {
 Why Separate Header and Implementation
 
 Separation reduces compile-time dependencies and speeds up builds.
-分離可以降低編譯相依性並加快編譯速度。
 
 Changes in implementation do not require recompiling all dependent files.
-修改實作時，不需要重新編譯所有相依檔案。
 
 It hides internal details and improves encapsulation.
-它可以隱藏內部細節並提升封裝性。
 
 It provides a clear interface for other developers to use.
-它為其他開發者提供清晰的使用介面。
 
 It supports large-scale project organization and maintainability.
-它有助於大型專案的結構化與可維護性。
 
-
-
+It provides a clear interface for other developers to use.
 
 const after a member function means the function does not modify the object's state.
 成員函式後面的 const 表示此函式不會修改物件的狀態。
@@ -123,8 +109,6 @@ p.getName();   // OK
 // p.setName("A"); // Error
 
 Const correctness improves code safety and readability.
-const 正確性可以提升程式安全性與可讀性。
-
 
 這裡的const表示不會修改到CalculatorContext物件的狀態，確保這個函式在被呼叫時不會改變任何成員變數的值。
 ```

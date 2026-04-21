@@ -1,7 +1,7 @@
-# Manus PPT Prompt — CAPI_Test 簡報製作
+# Manus PPT Prompt — CAPI_Test Presentation Prompt
 
-> 以下提供兩個版本的 Prompt：**版本 A（10 分鐘精簡版）** 與 **版本 B（完整版，超過 10 分鐘）**。
-> 請依據需要選擇其中一個複製給 Manus。
+> Two prompt variants are provided below: **Variant A (10-minute summary)** and **Variant B (full version, longer than 10 minutes)**.
+> Choose the one you need and copy it to Manus.
 
 ---
 

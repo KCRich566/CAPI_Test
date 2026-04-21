@@ -3,13 +3,12 @@
 C API calculator with temporary memory and persistent history (keeps last 10 results), supporting add, sub, mul, div.
 
 
-CMakePresets.json, CMAKELists.txt與Visual Studio IDE的關係:
-當按下儲存後, Visual Studio會自動偵測到CMakePresets.json的變更並重新載入專案設定。
-這意味著當你修改CMakePresets.json中的預設設定（例如編譯器、建置類型、平台等）並儲存後，Visual Studio會自動更新專案的配置以反映這些變更。
-如果沒有CMakePresets.json，Visual Studio會使用預設的CMake設定來構建專案，但有了CMakePresets.json，
-你可以更精細地控制構建過程，並且Visual Studio會自動適應這些設定的變更。
-如果想要關閉這個自動重新載入的功能，可以在Visual Studio的選項中找到CMake相關的設定，並取消勾選「當CMakePresets.json變更時自動重新載入專案」的選項。
-這些動作都是統移由CMAKE Target View來管理的, 你可以在CMAKE Target View中選擇不同的預設設定來構建專案, 而不需要手動修改CMakePresets.json。
+Relationship between CMakePresets.json, CMakeLists.txt and Visual Studio IDE:
+When you save changes, Visual Studio detects modifications to CMakePresets.json and automatically reloads the project configuration.
+This means editing presets (for example: generator, build type, platform) will cause Visual Studio to refresh the project settings accordingly.
+If no CMakePresets.json is present, Visual Studio will fall back to default CMake behavior. With presets, you gain finer control over the configuration and Visual Studio adapts automatically.
+If you prefer to disable automatic reload, adjust the CMake-related option in Visual Studio settings: "Automatically reload project when CMakePresets.json changes".
+Use the CMake Targets View to switch presets and build configurations without manually editing CMakePresets.json.
 ## Project Structure
 
 | Path | Description |

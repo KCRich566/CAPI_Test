@@ -1,8 +1,6 @@
 # Opaque Patterns in C/C++ — Types, Pointers, and API Design
 
-此文件整理了在 C 與 C++ 中實作不透明類型（opaque type）的常見做法、設計理由與注意事項，並以雙語（中 / 英）呈現要點與範例，方便用於教學或簡報。
-
-This document summarizes common opaque-type patterns in C and C++, the rationale behind them, and practical guidance. Key points are presented in both Chinese and English.
+This document summarizes common opaque-type patterns in C and C++, the rationale behind them, and practical guidance.
 
 ---
 
@@ -13,13 +11,11 @@ This document summarizes common opaque-type patterns in C and C++, the rationale
 - Controlled memory management — 凝聚分配與釋放責任。
 - Safety — 避免外部直接存取內部狀態造成誤用。
 
-這些優勢使不透明模式廣泛用於 C API、跨語言綁定與二進位相容性需求的專案。
+These benefits make the opaque pattern widely used in C APIs, cross-language bindings, and projects requiring binary compatibility.
 
 ---
 
 ## Core Idea / 核心概念
-
-使用者只看到一個前向宣告的型別或一個 opaque handle（例如 `void*` 或 `struct Foo*`），而無法得知其內部欄位或實作細節。
 
 The library exposes only a forward-declared type or an opaque handle (e.g. `void*` or `struct Foo*`) so callers cannot inspect or depend on the internal layout.
 
