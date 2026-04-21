@@ -23,12 +23,14 @@ public:
 	CalculatorError divide(double r, double& result);
 
 	double get_cur_value() const;
+    const std::string& get_history_data() const;
 	const std::string& get_history_file() const;
 
 private:
 	double cur_value_;
 	std::vector<double> history_;
 	std::string history_file_;
+	std::string history_data_;
 
 	CalculatorError load_history();
 	CalculatorError save_history();
@@ -117,6 +119,11 @@ const std::string& CalculatorContext::get_history_file() const
 	return history_file_;
 }
 
+const std::string& CalculatorContext::get_history_data() const
+{
+	return history_data_;
+}
+
 
 CalculatorError CalculatorContext::load_history()
 {
@@ -126,12 +133,14 @@ CalculatorError CalculatorContext::load_history()
 		{
 			return CALC_SUCCESS;
 		}
-		std::ifstream in(history_file_);
+        std::ifstream in(history_file_);
 		if (!in)
 		{
 			return CALC_ERROR_FILE_IO;
 		}
 		double val;
+		history_.clear();
+		// Read numeric values (whitespace separated) into history_
 		while (in >> val)
 		{
 			history_.push_back(val);
@@ -141,6 +150,14 @@ CalculatorError CalculatorContext::load_history()
 		{
 			return CALC_ERROR_FILE_IO;
 		}
+		// Build the library-owned history_data_ string as lines of values
+		std::ostringstream ss;
+		for (size_t i = 0; i < history_.size(); ++i)
+		{
+			ss << history_[i];
+			if (i + 1 < history_.size()) ss << std::endl;
+		}
+		history_data_ = ss.str();
 		if (history_.size() > 10)
 		{
 			history_.erase(history_.begin(), history_.end() - 10);
@@ -166,19 +183,24 @@ CalculatorError CalculatorContext::save_history()
 		{
 			return CALC_ERROR_FILE_IO;
 		}
-		for (double val : history_)
+        // Write history values to file and build history_data_
+		std::ostringstream ss;
+		for (size_t i = 0; i < history_.size(); ++i)
 		{
-			out << val << std::endl;
+			out << history_[i] << std::endl;
 			if (!out)
 			{
 				return CALC_ERROR_FILE_IO;
 			}
+			ss << history_[i];
+			if (i + 1 < history_.size()) ss << std::endl;
 		}
 		out.flush();
 		if (!out)
 		{
 			return CALC_ERROR_FILE_IO;
 		}
+		history_data_ = ss.str();
 		return CALC_SUCCESS;
 	}
 	catch (...)
@@ -316,7 +338,7 @@ CALCULATORDLL_API const char* calculator_get_history_data_from_file(CalculatorHa
 	}
 	try
 	{
-		return static_cast<CalculatorContext*>(handle)->get_history_file().c_str();
+        return static_cast<CalculatorContext*>(handle)->get_history_data().c_str();
 	}
 	catch (...)
 	{
@@ -332,7 +354,7 @@ CALCULATORDLL_API char* calculator_dup_history_data_from_file(CalculatorHandle h
 	}
 	try
 	{
-		const std::string& s = static_cast<CalculatorContext*>(handle)->get_history_file();
+        const std::string& s = static_cast<CalculatorContext*>(handle)->get_history_data();
 		size_t len = s.size();
 		char* out = static_cast<char*>(std::malloc(len + 1));
 		if (!out)

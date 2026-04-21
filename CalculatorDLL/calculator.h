@@ -45,6 +45,7 @@ typedef enum CalculatorErrorCode
 
 #ifdef __cplusplus
 extern "C" {
+	// avoid C++ name mangling, so that the functions can be called from C and other languages that can interface with C.
 #endif
 	// Forward declaration of the internal context structure
 	// it does not provide any details about its structure or implementation. 
@@ -102,7 +103,7 @@ extern "C" {
 	CALCULATORDLL_API void calculator_free(void* ptr);
 
 	/* ------------------------------------------------------------------ */
-	/*  Version query (managed-friendly, no handle needed)                 */
+	/*  Version query                 */
 	/* ------------------------------------------------------------------ */
 	CALCULATORDLL_API int         calculator_get_version_major(void);
 	CALCULATORDLL_API int         calculator_get_version_minor(void);

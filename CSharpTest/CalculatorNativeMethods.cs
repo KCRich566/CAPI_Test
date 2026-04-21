@@ -31,7 +31,7 @@ internal static class CalculatorNativeMethods
     internal static extern double calculator_get_cur_value(IntPtr handle);
 
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-    internal static extern IntPtr calculator_get_history_file(IntPtr handle);
+    internal static extern IntPtr calculator_get_history_data_from_file(IntPtr handle);
 
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
     internal static extern IntPtr calculator_dup_history_data_from_file(IntPtr handle);
@@ -89,7 +89,7 @@ public sealed class Calculator : IDisposable
     {
         get
         {
-            IntPtr p = CalculatorNativeMethods.calculator_get_history_file(handle);
+            IntPtr p = CalculatorNativeMethods.calculator_get_history_data_from_file(handle);
             return p == IntPtr.Zero ? null : Marshal.PtrToStringAnsi(p);
         }
     }
@@ -99,7 +99,10 @@ public sealed class Calculator : IDisposable
         get
         {
             IntPtr p = CalculatorNativeMethods.calculator_dup_history_data_from_file(handle);
-            if (p == IntPtr.Zero) return null;
+            if (p == IntPtr.Zero)
+            {
+                return null;
+            }
             try
             {
                 return Marshal.PtrToStringAnsi(p);
@@ -113,7 +116,6 @@ public sealed class Calculator : IDisposable
 
     /// <summary>
     /// Returns the native DLL version string (e.g. "1.0.0").
-    /// 回傳原生 DLL 的版本字串。
     /// </summary>
     public static string? NativeVersion
     {

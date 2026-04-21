@@ -45,7 +45,6 @@ dotnet run --project CSharpTest
 ```Developer Command Prompt
 echo %VSCMD_ARG_TGT_ARCH%
 "C:\Program Files\Microsoft Visual Studio\18\Community\VC\Auxiliary\Build\vcvarsall.bat" x64
-powershell
 ```
 
 ```powershell
@@ -93,6 +92,7 @@ dotnet run --project CSharpTest -c Debug -p:Platform=ARM64
 WSL ARM64 Debug
 wsl cmake --preset wsl-arm64-debug
 wsl cmake --build --preset wsl-arm64-debug
+wsl dotnet run --project CSharpTest -c Debug -p:Platform=ARM64
 ```
 之後把dll複製到C#專案的資料夾裡面, 這樣就可以在C#專案裡面使用這些dll了。
 同時需要修改csproj檔案的PlatformTarget

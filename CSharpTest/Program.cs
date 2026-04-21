@@ -44,7 +44,13 @@ class Program
             Console.WriteLine($"-7 / 2 = {r6}");
 
             Console.WriteLine($"Memory: {calc.Memory}");
-            Console.WriteLine($"History file: {calc.HistoryFile}");
+            // Show history via the dup method (managed copy returned by Calculator.HistoryFile)
+            var historyDup = calc.HistoryFile; // uses calculator_dup_history_data_from_file and frees the native buffer
+            Console.WriteLine($"History (dup): {historyDup ?? "<null>"}");
+
+            // Show history via the library-owned pointer (do not free) — valid while the Calculator handle is alive
+            var historyLibOwned = calc.HistoryFileLibraryOwned;
+            Console.WriteLine($"History (library-owned): {historyLibOwned ?? "<null>"}");
 
             // === Sobel Edge Detection Test ===
             Console.WriteLine();
