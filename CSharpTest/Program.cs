@@ -25,23 +25,35 @@ class Program
 
             rc = calc.Add(3, out double r2);
             if (rc != CalculatorError.CALC_SUCCESS) Console.WriteLine($"Add failed: {rc}");
-            Console.WriteLine($"0 + 3 = {r2}");
+            Console.WriteLine($"Add(3) = {r2}");
 
             rc = calc.Subtract(4, out double r3);
             if (rc != CalculatorError.CALC_SUCCESS) Console.WriteLine($"Subtract failed: {rc}");
-            Console.WriteLine($"3 - 4 = {r3}");
+            Console.WriteLine($"Subtract(4) = {r3}");
 
-            rc = calc.Multiply(7, out double r4);
+            rc = calc.Multiply(50, out double r4);
             if (rc != CalculatorError.CALC_SUCCESS) Console.WriteLine($"Multiply failed: {rc}");
-            Console.WriteLine($"-1 * 7 = {r4}");
+            Console.WriteLine($"Multiply(50) = {r4}");
 
             rc = calc.Divide(0, out double r5);
             if (rc != CalculatorError.CALC_SUCCESS)
-                Console.WriteLine($"-7 / 0 error: {rc}");
+                Console.WriteLine($"Divide(0) error: {rc}");
 
             rc = calc.Divide(2, out double r6);
             if (rc != CalculatorError.CALC_SUCCESS) Console.WriteLine($"Divide failed: {rc}");
-            Console.WriteLine($"-7 / 2 = {r6}");
+            Console.WriteLine($"Divide(2) = {r6}");
+
+            rc = calc.Multiply(double.MaxValue, out double r7);
+            if (rc != CalculatorError.CALC_SUCCESS) Console.WriteLine($"Multiply failed: {rc}");
+            Console.WriteLine($"Multiply({double.MaxValue}) = {r7}");
+
+            rc = calc.Add(4000, out double r8);
+            if (rc != CalculatorError.CALC_SUCCESS) Console.WriteLine($"Add failed: {rc}");
+            Console.WriteLine($"Add(4000) = {r8}");
+
+            rc = calc.Multiply(int.MaxValue, out double r9);
+            if (rc != CalculatorError.CALC_SUCCESS) Console.WriteLine($"Multiply failed: {rc}");
+            Console.WriteLine($"Multiply({int.MaxValue}) = {r9}");
 
             Console.WriteLine($"Memory: {calc.Memory}");
             // Show history via the dup method (managed copy returned by Calculator.HistoryFile)

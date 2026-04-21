@@ -59,6 +59,7 @@ public enum CalculatorError : int
     CALC_ERROR_DIVIDE_BY_ZERO = -1,
     CALC_ERROR_INVALID_OPERATION = -2,
     CALC_ERROR_FILE_IO = -3,
+    CALC_ERROR_OVERFLOW = -4,
     CALC_ERROR_UNKNOWN = -99
 }
 

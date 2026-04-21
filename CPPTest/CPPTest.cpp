@@ -8,8 +8,12 @@
 #include <fstream>
 #include <string>
 #include <filesystem>
+#include <limits>
 
 #ifdef _WIN32
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
 #include <windows.h>
 #endif
 
@@ -60,49 +64,57 @@ int main()
 	if (rc != CALC_SUCCESS) std::cout << "Reset failed: " << rc << std::endl;
 	std::cout << "Reset: " << result << std::endl;
 
-	rc = calculator_add(calc, 3, &result);
+    rc = calculator_add(calc, 3, &result);
 	if (rc != CALC_SUCCESS) std::cout << "Add failed: " << rc << std::endl;
-	std::cout << "0 + 3 = " << result << std::endl;
+	std::cout << "Add(3) = " << result << std::endl;
 
 	rc = calculator_subtract(calc, 4, &result);
 	if (rc != CALC_SUCCESS) std::cout << "Subtract failed: " << rc << std::endl;
-	std::cout << "3 - 4 = " << result << std::endl;
+	std::cout << "Subtract(4) = " << result << std::endl;
 
-	rc = calculator_multiply(calc, 7, &result);
+	rc = calculator_multiply(calc, 50, &result);
 	if (rc != CALC_SUCCESS) std::cout << "Multiply failed: " << rc << std::endl;
-	std::cout << "-1 * 7 = " << result << std::endl;
+	std::cout << "Multiply(50) = " << result << std::endl;
 
 	rc = calculator_divide(calc, 0, &result);
 	if (rc != CALC_SUCCESS)
 	{
-		std::cout << "-7 / 0 error code: " << rc << std::endl;
+		std::cout << "Divide(0) error: " << rc << std::endl;
 	}
 
 	rc = calculator_divide(calc, 2, &result);
 	if (rc != CALC_SUCCESS) std::cout << "Divide failed: " << rc << std::endl;
-	std::cout << "-7 / 2 = " << result << std::endl;
+	std::cout << "Divide(2) = " << result << std::endl;
 
-	std::cout << "Current Value: " << calculator_get_cur_value(calc) << std::endl;
+	// attempt multiplication by a very large value to exercise overflow handling
+	rc = calculator_multiply(calc, std::numeric_limits<double>::max(), &result);
+	if (rc != CALC_SUCCESS) std::cout << "Multiply failed: " << rc << std::endl;
+	std::cout << "Multiply(" << std::numeric_limits<double>::max() << ") = " << result << std::endl;
 
-	for (int i = 1; i <= 15; ++i)
+	rc = calculator_add(calc, 4000, &result);
+	if (rc != CALC_SUCCESS) std::cout << "Add failed: " << rc << std::endl;
+	std::cout << "Add(4000) = " << result << std::endl;
+
+	rc = calculator_multiply(calc, static_cast<double>(std::numeric_limits<int>::max()), &result);
+	if (rc != CALC_SUCCESS) std::cout << "Multiply failed: " << rc << std::endl;
+	std::cout << "Multiply(" << std::numeric_limits<int>::max() << ") = " << result << std::endl;
+
+	std::cout << "Memory: " << calculator_get_cur_value(calc) << std::endl;
+
+	// Show history via the dup method (caller must free) and the library-owned pointer
+	char* dupHistory = calculator_dup_history_data_from_file(calc);
+	if (dupHistory)
 	{
-		rc = calculator_add(calc, i, &result);
-		if (rc != CALC_SUCCESS) std::cout << "Add failed at " << i << ": " << rc << std::endl;
-	}
-
-	print_history(calculator_get_history_data_from_file(calc));
-
-	// Test calculator_dup_history_data_from_file (caller must free with calculator_free)
-	char* dupPath = calculator_dup_history_data_from_file(calc);
-	if (dupPath)
-	{
-		std::cout << "Duplicated history file path: " << dupPath << std::endl;
-		calculator_free(dupPath);
+		std::cout << "History (dup): " << dupHistory << std::endl;
+		calculator_free(dupHistory);
 	}
 	else
 	{
-		std::cout << "calculator_dup_history_data_from_file returned nullptr" << std::endl;
+		std::cout << "History (dup): <null>" << std::endl;
 	}
+
+	const char* libHistory = calculator_get_history_data_from_file(calc);
+	std::cout << "History (library-owned): " << (libHistory ? libHistory : "<null>") << std::endl;
 
 	calculator_destroy(calc);
 

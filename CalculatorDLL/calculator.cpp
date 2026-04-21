@@ -3,6 +3,8 @@
 #include <stddef.h>
 #include <cstdlib>
 #include <cstring>
+#include <cmath>
+#include <limits>
 #include <string>
 #include <vector>
 #include <fstream>
@@ -77,7 +79,13 @@ CalculatorError CalculatorContext::reset(double& result)
 
 CalculatorError CalculatorContext::add(double r, double& result)
 {
-	cur_value_ = cur_value_ + r;
+    // perform operation into a temporary and validate for overflow/NaN/inf
+	double newval = cur_value_ + r;
+    if (!std::isfinite(newval))
+	{
+		return CALC_ERROR_OVERFLOW;
+	}
+	cur_value_ = newval;
 	result = cur_value_;
 	history_.push_back(cur_value_);
 	return save_history();
@@ -85,7 +93,12 @@ CalculatorError CalculatorContext::add(double r, double& result)
 
 CalculatorError CalculatorContext::subtract(double r, double& result)
 {
-	cur_value_ = cur_value_ - r;
+    double newval = cur_value_ - r;
+    if (!std::isfinite(newval))
+	{
+		return CALC_ERROR_OVERFLOW;
+	}
+	cur_value_ = newval;
 	result = cur_value_;
 	history_.push_back(cur_value_);
 	return save_history();
@@ -93,7 +106,12 @@ CalculatorError CalculatorContext::subtract(double r, double& result)
 
 CalculatorError CalculatorContext::multiply(double r, double& result)
 {
-	cur_value_ = cur_value_ * r;
+    double newval = cur_value_ * r;
+    if (!std::isfinite(newval))
+	{
+		return CALC_ERROR_OVERFLOW;
+	}
+	cur_value_ = newval;
 	result = cur_value_;
 	history_.push_back(cur_value_);
 	return save_history();
@@ -104,7 +122,12 @@ CalculatorError CalculatorContext::divide(double r, double& result)
 	{
 		return CALC_ERROR_DIVIDE_BY_ZERO;
 	}
-	cur_value_ = cur_value_ / r;
+    double newval = cur_value_ / r;
+    if (!std::isfinite(newval))
+	{
+		return CALC_ERROR_OVERFLOW;
+	}
+	cur_value_ = newval;
 	result = cur_value_;
 	history_.push_back(cur_value_);
 	return save_history();
@@ -356,6 +379,11 @@ CALCULATORDLL_API char* calculator_dup_history_data_from_file(CalculatorHandle h
 	{
         const std::string& s = static_cast<CalculatorContext*>(handle)->get_history_data();
 		size_t len = s.size();
+		// check for absurdly large sizes that could overflow when adding 1
+		if (len > std::numeric_limits<size_t>::max() - 1)
+		{
+			return nullptr;
+		}
 		char* out = static_cast<char*>(std::malloc(len + 1));
 		if (!out)
 		{

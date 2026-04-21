@@ -46,7 +46,6 @@ echo %VSCMD_ARG_TGT_ARCH%
 cmake --preset windows-x64-debug
 cmake --build --preset windows-x64-debug
 dotnet run --project CSharpTest -c Debug -p:Platform=x64
-
 ```
 
 - x86
@@ -77,7 +76,7 @@ Also ensure the C# project's `PlatformTarget` matches the native DLL architectur
 ## Build in WSL (produce .so)
 
 - ARM64
-- 
+
 ```shell
 wsl cmake --preset wsl-arm64-debug
 wsl cmake --build --preset wsl-arm64-debug

@@ -39,6 +39,7 @@ typedef enum CalculatorErrorCode
 	CALC_ERROR_DIVIDE_BY_ZERO = -1,
 	CALC_ERROR_INVALID_OPERATION = -2,
 	CALC_ERROR_FILE_IO = -3,
+	CALC_ERROR_OVERFLOW = -4,
 	CALC_ERROR_UNKNOWN = -99
 } CalculatorError;
 
@@ -47,13 +48,7 @@ typedef enum CalculatorErrorCode
 extern "C" {
 	// avoid C++ name mangling, so that the functions can be called from C and other languages that can interface with C.
 #endif
-	// Forward declaration of the internal context structure
-	// it does not provide any details about its structure or implementation. 
-	// This allows us to use pointers to CalculatorContext in our API without exposing the internal details of the context, 
-	// which are defined in the implementation file (calculator.cpp).
-	// but we use the void*, it will impact the debug experience, 
-	// as the debugger will not be able to show the internal structure of the context.
-	// so maybe using the typedef CalculatorContext* is better, 
+	// maybe using the typedef CalculatorContext* is better, 
 	// it will allow the debugger to show the internal structure of the context, 
 	typedef void* CalculatorHandle;
 

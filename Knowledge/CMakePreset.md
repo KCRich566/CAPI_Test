@@ -8,11 +8,9 @@ Presets include generator, binaryDir, architecture, and cacheVariables.
 
 ## Purpose
 
-Use presets for consistent and repeatable builds across environments.  
-使用 presets 可在不同環境中達到一致且可重現的建置流程。
+Use presets for consistent and repeatable builds across environments.
 
-They reduce manual CMake configuration errors.  
-它們可減少手動設定 CMake 時的錯誤。
+They reduce manual CMake configuration errors.
 
 ---
 
