@@ -361,7 +361,7 @@ CALCULATORDLL_API const char* calculator_get_history_data_from_file(CalculatorHa
 	}
 	try
 	{
-        return static_cast<CalculatorContext*>(handle)->get_history_data().c_str();
+		return static_cast<CalculatorContext*>(handle)->get_history_data().c_str();
 	}
 	catch (...)
 	{

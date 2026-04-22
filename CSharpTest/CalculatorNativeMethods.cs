@@ -83,9 +83,10 @@ public sealed class Calculator : IDisposable
 
     public double Memory => CalculatorNativeMethods.calculator_get_cur_value(handle);
 
-    // Returns a managed copy of the library-owned history file string.
-    // The returned string is a managed copy; the Calculator handle must remain valid while
-    // calling this accessor because it reads from library-owned storage.
+    // Returns a managed copy of the library-owned history file string. The pointer
+    // returned by the native function is owned by the library and MUST NOT be freed by the caller.
+    // The pointer is valid until the handle is modified or destroyed; if you need a long-lived
+    // copy use the `HistoryFile` property which calls the dup/free API.
     public string? HistoryFileLibraryOwned
     {
         get

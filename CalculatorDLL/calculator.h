@@ -76,17 +76,24 @@ extern "C" {
 	 */
 	CALCULATORDLL_API double calculator_get_cur_value(CalculatorHandle handle);
 
-	/*
-	 * `calculator_get_history_file`
-	 *	- Returns a library-owned `const char*` pointing to internal storage. Caller MUST NOT free it.
-	 *	- Valid until `calculator_destroy` is called or until the library documents it becomes invalid.
+    /*
+	* `calculator_get_history_data_from_file`
+	*	- Returns a library-owned `const char*` pointing to internal storage. Caller MUST NOT free it.
+	*	- The returned pointer is valid only until the next call that modifies the calculator state
+	*	  (for the same handle) or until `calculator_destroy` is called.
+	*	- NOT thread-safe: concurrent modification of the same handle from other threads may
+	*	  invalidate the pointer and lead to undefined behavior. If you need to use the data
+	*	  across threads or keep it long-lived, call `calculator_dup_history_data_from_file`.
 	*/
 	CALCULATORDLL_API const char* calculator_get_history_data_from_file(CalculatorHandle handle);
+
 	/*
-	 * `calculator_dup_history_file`
-	 *	- Returns a newly allocated `char*` (caller-owned). Caller MUST free it with `calculator_free`.
-	 *	- Use this when you need the string beyond the lifetime of the handle or to modify it.
-	 */
+	* `calculator_dup_history_data_from_file`
+	*	- Returns a newly allocated `char*` (caller-owned). Caller MUST free it with `calculator_free`.
+	*	- This function creates an independent copy of the history data and therefore is safe to
+	*	  use across threads (caller owns the copy). Prefer this API when you need a long-lived
+	*	  or cross-thread string.
+	*/
 	CALCULATORDLL_API char* calculator_dup_history_data_from_file(CalculatorHandle handle);
 
 	/*
