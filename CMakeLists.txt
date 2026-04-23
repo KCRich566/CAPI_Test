@@ -139,30 +139,7 @@ endif()
 message(STATUS "WIN32: ${WIN32}")
 if(NOT WIN32)
     set_target_properties(CPPTest PROPERTIES
-        BUILD_RPATH "${CMAKE_BINARY_DIR}/lib"
+        BUILD_RPATH "\$ORIGIN;\$ORIGIN/../lib"
+        INSTALL_RPATH "\$ORIGIN/../lib"
     )
 endif()
-
-
-# Build / run examples and notes
-# Windows (MSVC):
-#   cmake -S . -B build_msvc && cmake --build build_msvc --config Debug
-# Linux (Ninja):
-#   wsl cmake -S . -B build_linux -G Ninja && wsl cmake --build build_linux
-
-# Example commands for building DLLs and running the C# test project:
-# Windows (MSVC):
-#   cmd /c "`"C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Auxiliary\\Build\\vcvarsall.bat`" x64"
-#   cmake --preset windows-x64-debug
-#   cmake --build --preset windows-x64-debug
-
-# WSL / Linux: ensure dotnet SDK is installed for running the C# project in WSL.
-#   wsl sudo apt-get update
-#   wsl sudo apt-get install -y dotnet-sdk-10.0
-#   wsl bash -c "cd /mnt/c/Users/KCRic/Desktop/Code/CAPI_Calculator && dotnet run --project CSharpTest"
-
-# CMake presets examples for various architectures (Windows):
-# x64 Debug: configure and build using x64 toolset.
-# x86 Debug: configure and build using x86 toolset; make sure vcvarsall.bat x86 is used.
-# ARM64 Debug: configure and build using ARM64 toolset.
-
