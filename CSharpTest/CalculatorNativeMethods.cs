@@ -81,7 +81,11 @@ public sealed class Calculator : IDisposable
     public CalculatorError Multiply(double r, out double result) => (CalculatorError)CalculatorNativeMethods.calculator_multiply(handle, r, out result);
     public CalculatorError Divide(double r, out double result) => (CalculatorError)CalculatorNativeMethods.calculator_divide(handle, r, out result);
 
-    public double Memory => CalculatorNativeMethods.calculator_get_cur_value(handle);
+    [Obsolete("Use CurrentValue instead.")]
+    public double Memory => CurrentValue;
+
+    // Named to match native `get_cur_value` and follow C# PascalCase convention
+    public double CurrentValue => CalculatorNativeMethods.calculator_get_cur_value(handle);
 
     // Returns a managed copy of the library-owned history file string. The pointer
     // returned by the native function is owned by the library and MUST NOT be freed by the caller.
